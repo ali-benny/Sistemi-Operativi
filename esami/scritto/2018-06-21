@@ -98,9 +98,38 @@ monitor tmon {
 	}
 } 
 ```
-
 # Esercizio c2
+Facendo uso di semafori ordinari implementare semafori a limite intero N che possano assumere valori
+-N, -N+1, ...,1, 0, 1, ..., N-1, N.
+L'invariante dei semafori a limite intero di questo esercizio è:
+ nP - N <= nV + init <= nP + N
+dove nP è il numero di operazioni P completate, nV il numero delle operazioni V completate e init è il valore iniziale del semaforo.
 
+```c#
+class bounded_semaphore {
+	semaphore plus;
+	semaphore minus;
+	int value;
+
+	bounded_semaphore(int init-val, unsigned max-val){
+		value = init-val;
+		plus = new semaphore(max-val + init-val);
+		minus = new semaphore(max-val - init-val);
+	}
+
+	void P(){
+		plus.P();
+		value--;
+		minus.V();
+	}
+
+	void V(){
+		minus.P();
+		value++;
+		plus.V();
+	}
+}
+```
 # Esercizio g1
 banchiere multivaluta UNSAFE
 
