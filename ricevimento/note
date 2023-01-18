@@ -1,0 +1,39 @@
+esame 2018-02-
+es g1 ha consegna errata: è un es del banchiere
+
+esame 2021-07-21
+c2
+func wV -> if non è detto che rilasci la mutex: si mandano 2 V in realtà
+infatti func wP -> processo bloccato > manda la v più volte anche se c'e' solo 1 processo bloccato
+			la s.p non daeve rendere la mutex.p [ lo risveglio già con la mutex.v ] lasciandolo lì fa deadlock
+
+esame 2019-05-18
+c1
+important! se ci sono tutti i pezzi e nessuno è in coda => posso prenderlo dal magazzino
+
+monitor storage{
+	int storage [16]
+	queue of int <16> q
+
+	void add(int[16] components){
+		storage += components; // vettore somma => aumenta il magazzino per ogni tipo di prodotto
+		if (!q.empty() && storage >= q.head()) // ogni elemento del magazzino è sufficiente per le richieste allora OK
+			c.signal()
+	}
+
+	void get(int[16] components){
+		if (!q.empty() || !storage >= components) // se c'è qualcuno in coda [non è vuota] o non ci sono abbastanza pezzi in magazzino
+			// mi fermo anche se non è vuota x FIFO
+			q.enqueue(components)
+			c.wait()
+			q.dequeue()
+		storage -= components	// posso toglierli dal magazzino
+		if (!q.empty() && storage >= components) // se non ci sono sufficienti elementi o c'è ancora qualcuno da "svegliare"
+			c.signal()	// il primo in attesa gli mando il segnale
+	}
+}
+
+esame 2021-06-23
+c2
+è come un semaforo: l''invarianza del semaforo
+sblocco quello a priorità massima tra quelli in attesa

@@ -1,0 +1,42 @@
+semaphore mutex(1) semaphore semr(0)semahore semw(0)
+int wr=0 ww=0 nr=0 nw=0
+
+process Reader
+{
+    mutex.P();
+    if (nw > 0) {
+        wr++;
+        mutex.V();
+        semr.P();
+        wr--;
+    }
+    nr++;
+    SIGNAL();
+    read the database
+    mutex.P();
+    nr--;
+    SIGNAL();
+}
+
+process Writer
+{
+    < await (nr == 0 && nw == 0) -> nw++>
+    mutex.P();
+    if (nw > 0 || nw > 0) {
+        ww++;
+        mutex.V();
+        semw.P();
+        ww[i]--;
+    }
+    nw++;
+    SIGNAL();
+    write the database
+    mutex.P();
+    nw--;
+    SIGNAL();
+}
+
+SIGNAL
+    if (nw == 0 && wr > 0) semr.V()
+    else iw (nw==0 && nr==0) semw.V()
+    else mutex.V();

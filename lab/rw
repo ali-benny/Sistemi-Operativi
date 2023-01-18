@@ -1,0 +1,13 @@
+process Reader
+{
+    < await (nw == 0) -> nr++>
+    read the database
+    <nr-->
+}
+
+process Writer
+{
+    < await (nw == 0 && nr==0) -> nw++>
+    write the database
+    <nw-->
+}

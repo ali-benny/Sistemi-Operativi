@@ -1,0 +1,1 @@
+> Programma = specifica una sequenza di instruzioni (entità statica)indivisiile
