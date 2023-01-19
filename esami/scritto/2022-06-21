@@ -10,21 +10,18 @@ monitor collocamento {
 
 	persone waiting_p[skill];	// lista FIFO di persone in attesa di essere assunti con skill
 	int waiting_dat[skill];		// numero di datori di lavoro in attesa di qualcuno con skill
-	char *name2send;	
+	char *name2send = null;	
 	condition p, dat;
 
 	void cercolavoro(char *nome, char *skill){
-		name2send = null;
 		// controllo se ci sono richieste per la skill
 		if (waiting_dat[skill]==0){
 			p.wait();
-			// aggiungo la nuova persona alla lista di attesa
-			while (!waiting_p[skill].isEmpty())
-				waiting_p[skill].next();
-			waiting_p[skill].nome = nome; 
 		}
-		if (waiting_p[skill].isEmpty())		//? non mi convince
-			name2send = nome;
+		// aggiungo la nuova persona alla lista di attesa
+		while (!waiting_p[skill].isEmpty())
+			waiting_p[skill].next();
+		waiting_p[skill].nome = nome; 
 		name2send = waiting_dat[skill].nome;
 		waiting_dat[skill]--;
 		dat.signal();
