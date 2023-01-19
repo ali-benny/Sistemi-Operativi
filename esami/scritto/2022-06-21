@@ -26,18 +26,19 @@ monitor collocamento {
 		if (waiting_p[skill].isEmpty())		//? non mi convince
 			name2send = nome;
 		name2send = waiting_dat[skill].nome;
-		
+		waiting_dat[skill]--;
+		dat.signal();
 	}
 
 	char* assumo(char *skill){
-		if (waiting_p[skill].isEmpty() && name2send==null)
+		if (waiting_p[skill].isEmpty())
 				dat.wait();
 		// qualcuno è in attesa con la skill richiesta
-		name2send = waiting_p[skill].nome;
-		waiting_p[skill].remove(); // rimuovo il primo elemento in cima che ho salvato perchè è stato assunto
+		if (name2send == null){
+			name2send = waiting_p[skill].nome;
+			waiting_p[skill].remove(); // rimuovo il primo elemento in cima che ho salvato perchè è stato assunto
+		}
 		p.signal();		// libero p
-		waiting_dat[skill]--;
-		dat.signal();
 		return name2send;
 	}
 }
