@@ -43,6 +43,17 @@
   	   S_ISLNK(m)  symbolic link? (Not in POSIX.1-1996.)
   	   S_ISSOCK(m) socket? (Not in POSIX.1-1996.)
   
+  - # Rimuovi il link[*](http://www.unix.com/man-page/Linux/2/unlink/)
+
+        int unlink(const char *__name)
+    Remove the link NAME.
+  - # Trova il vero path di un symlink
+
+        char *realpath(const char *__restrict__ __name, char *__restrict__ __resolved)
+    **Return** the canonical absolute name of file NAME. 
+    - If RESOLVED is null, the result is malloc'd; otherwise, 
+    - if the canonical name is PATH_MAX chars or more, returns null with `errno' set to ENAMETOOLONG; 
+    - if the name fits in fewer than PATH_MAX chars, returns the name in RESOLVED.
 - # open - Apri ed eventualmente crea file o device[*](https://www.unix.com/man-page/Linux/2/open/)
   ```c
      #include <sys/types.h>
@@ -98,6 +109,32 @@
   
   ```
 - # Directory
+  - ## opendir - aprire directory[*](https://man7.org/linux/man-pages/man3/opendir.3.html)
+    ```c
+    #include <sys/types.h>
+    #include <dirent.h>
+    DIR *opendir(const char *__name)
+    
+    ```
+    Open a directory stream on NAME.
+    Return a DIR stream on the directory, or NULL if it could not be opened.
+  - ## readdir - leggere directory[*](https://man7.org/linux/man-pages/man3/readdir.3.html)  
+    ```c
+    #include <dirent.h>
+    struct dirent *readdir(DIR *directory_pointer);
+    ```
+    ### return
+    - struttura:
+    
+          struct dirent {
+             ino_t          d_ino;       /* Inode number */
+             off_t          d_off;       /* Not an offset; see below */
+             unsigned short d_reclen;    /* Length of this record */
+             unsigned char  d_type;      /* Type of file; not supported
+                                            by all filesystem types */
+             char           d_name[256]; /* Null-terminated filename */
+          };
+    - NULL con/senza errno
 - # realpath - absolute pathname[*](https://man7.org/linux/man-pages/man3/realpath.3.html)
   ```c
   #include <limits.h>
