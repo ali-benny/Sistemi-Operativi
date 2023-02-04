@@ -14,6 +14,8 @@
 #include <sys/types.h>// stat
 #include <sys/stat.h>//stat
 #include <unistd.h>//stat
+#include <string.h>// strcat
+#include <dirent.h>// dirname
 
 // controllo argomenti
 // trovo la cartella di mylink [argv[1]]
