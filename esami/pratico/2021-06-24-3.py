@@ -12,5 +12,14 @@ corregge l'indentazione del programma sorgente C prog.c.
 import os
 import sys
 
-def main():
-	
+def correct_indentation(path):
+	for root, dirs, files in os.walk(path):	# sys.argv[1] è la directory passata come parametro
+		for file in files:	
+			if file.endswith(".c") or file.endswith(".h"):
+				os.system("ex -n '+norm!gg=G' +wq " + os.path.join(root, file))	# esegue il comando ex per ogni file .c o .h
+
+if __name__ == "__main__":
+	if len(sys.argv) > 1:
+		correct_indentation(sys.argv[1])
+	else:
+		correct_indentation(".")
