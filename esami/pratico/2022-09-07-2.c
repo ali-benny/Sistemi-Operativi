@@ -69,3 +69,62 @@ int rilancia (int argc, char* argv[]){
 	}
 	return 0;
 }
+
+/** Esercizio 2
+ * Si esegue il programma dell'esercizio 1 con:
+ * rilancia cat /etc/hostname
+ * il comando cat viene eseeguito ripetuttamente all'infinito.
+ * Modificare il programma rilancia per fare in modo che 
+ * - se l'esecuzione del programma dura meno di un secondo => non si proceda alla riattivazione.
+*/
+# include <time.h> 	/* time, clock */
+
+int rilancia2 (int argc, char* argv[]){
+	// devo avere almeno 2 argomenti
+	if (argc < 2) {
+		printf("ERROR: inserisci almeno 2 argomenti nel comando");
+		exit(1);
+	}
+	pid_t pid;
+	int wait_status;
+	int return_value = 1;
+	char* argo[argc];
+	argo[argc - 1] = NULL;
+	clock_t start, end;		/* clock */
+	double exec_time;		/* clock */
+
+	for (int i = 0; i < (argc - 1); i++) {
+		argo[i] = malloc(sizeof(char)* strlen(argv[i + 1]));
+		strcpy(argo[i], argv[i + 1]);
+	}
+
+	do {
+		switch (pid = fork()) {
+			case -1:
+				exit(1);
+				break;
+			case 0:
+				printf("Esecuzione da processo pid = %d\n", getpid());
+				start = clock();
+				execvp(argo[0], argo);
+				end = clock();
+				exec_time = (double)(end - start) / CLOCKS_PER_SEC;
+				if (exec_time < 1){
+					printf("Esecuzione troppo breve, non si procede alla riattivazione");
+					exit(0);
+				}
+				break;
+			default:
+				if (waitpid(pid, &wait_status, 0) == -1)
+					exit(1);
+				return_value = WEXITSTATUS(wait_status);
+				break;
+		}
+	} while (return_value == 0 && !(WIFSIGNALED(wait_status)));
+	if ((return_value != 0) || WIFSIGNALED(wait_status))
+  		printf("Process terminato con errore");
+	for (int i = 0; i < argc - 1; i++) {
+		free(argo[i]);
+	}
+	return 0;
+}

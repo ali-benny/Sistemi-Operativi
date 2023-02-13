@@ -9,9 +9,12 @@
   - [Directory](#directory)
     - [opendir - aprire directory\*](#opendir---aprire-directory)
     - [readdir - leggere directory\*](#readdir---leggere-directory)
+      - [return](#return)
   - [realpath - absolute pathname\*](#realpath---absolute-pathname)
-    - [return](#return)
+    - [return](#return-1)
     - [const](#const)
+  - [clock()\* - tempo di esecuzione](#clock---tempo-di-esecuzione)
+    - [return](#return-2)
 
 # syscall
 ## stat - Get file status[*](https://www.unix.com/man-page/Linux/2/lstat/)
@@ -163,3 +166,43 @@ All of these system calls **return** a stat structure, which contains the follow
   ### const
   - `PATH_MAX` = 4096      //! BUGS
   - `NAME_MAX`
+
+## clock()[*](https://man7.org/linux/man-pages/man3/clock.3.html) - tempo di esecuzione
+returns the number of clock ticks elapsed since the program started
+
+```c
+# include <time.h> /* time, clock */
+```
+```c
+clock_t start, end;
+double execution_time;
+start = clock();
+
+/* Put your code to count here */
+
+end = clock();
+execution_time = ((double)(end - start))/CLOCKS_PER_SEC;
+```
+
+### return
+The value returned is the CPU time used so far as a clock_t; to
+get the number of seconds used, divide by CLOCKS_PER_SEC.  
+
+If the processor time used is not available or its value cannot be
+represented, the function returns the value (clock_t) -1.
+
+- Example[**](https://www.techcrashcourse.com/2016/02/c-program-to-find-execute-time-of-program.html)
+
+# Python
+## os[*](https://docs.python.org/3/library/os.html)
+### os.access()[**](https://docs.python.org/3/library/os.html#os.access)
+serve per controllare se un utente e` autorizzato ad aprire/leggere/scrivere/eseguire un file
+
+	os.F_OK
+	os.R_OK
+	os.W_OK
+	os.X_OK
+
+Values to pass as the mode parameter of access() to test the existence, readability, writability and executability of path, respectively.
+
+## subprocess[*](https://docs.python.org/3/library/subprocess.html)
