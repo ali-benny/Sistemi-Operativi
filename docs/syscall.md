@@ -197,6 +197,55 @@ represented, the function returns the value (clock_t) -1.
 
 - Example[**](https://www.techcrashcourse.com/2016/02/c-program-to-find-execute-time-of-program.html)
 
+## Segnali
+### signal()[*](https://man7.org/linux/man-pages/man2/signal.2.html) 
+### pause[*](https://man7.org/linux/man-pages/man2/pause.2.html)
+```c
+#include <unistd.h>
+int pause(void);
+```
+causes the calling process (or thread) to sleep until a
+signal is delivered that either terminates the process or causes
+the invocation of a signal-catching function.
+#### return 
+returns only when a signal was caught and the signal-
+catching function returned.  In this case, pause() returns -1,
+and errno is set to EINTR.
+### sigwait()[*](https://linux.die.net/man/3/sigwait)
+```c
+#include <signal.h>	
+int sigwait(const sigset_t *set, int *sig);
+```
+sospende l'esecuzione del thread chiamante fino a quando una signal specifica diventa pending
+#### return 
+only returns the **signal number**, rather than a siginfo_t structure describing the signal. 
+- On success, sigwait() returns 0. 
+- On error, it returns a positive error number (listed in ERRORS). 
+  
+### sigqueue()[*](https://man7.org/linux/man-pages/man3/sigqueue.3.html) - send signal `sig` to a process with pid `pid`
+inviare segnali
+
+```c
+#include <signal.h>
+```
+```c
+int sigqueue(pid_t pid, int sig, const union sigval value);
+```
+The value argument is used to specify an accompanying item of
+data (either an integer or a pointer value) to be sent with the
+signal, and has the following type:
+
+	union sigval {
+		int   sival_int;
+		void *sival_ptr;
+	};
+#### return 
+- On success, sigqueue() returns 0, indicating that the signal was
+successfully queued to the receiving process.  
+- Otherwise, -1 is
+returned and errno is set to indicate the error.
+
+
 # Python
 ## os[*](https://docs.python.org/3/library/os.html)
 ### os.access()[**](https://docs.python.org/3/library/os.html#os.access)
