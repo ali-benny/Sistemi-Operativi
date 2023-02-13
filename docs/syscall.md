@@ -15,6 +15,10 @@
     - [const](#const)
   - [clock()\* - tempo di esecuzione](#clock---tempo-di-esecuzione)
     - [return](#return-2)
+- [Python](#python)
+  - [os\*](#os)
+    - [os.access()\*\*](#osaccess)
+  - [subprocess\*](#subprocess)
 
 # syscall
 ## stat - Get file status[*](https://www.unix.com/man-page/Linux/2/lstat/)
